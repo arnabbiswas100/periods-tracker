@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lumina Flow — Your Cycle, Your Power</title>
+  <meta name="description" content="Lumina Flow — A beautiful, intimate period tracking app." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body class="relative">
+
+  <!-- Animated background orbs -->
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
+
+  <!-- Confetti canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Toast -->
+  <div id="toast">🌸</div>
+
+  <!-- Onboarding Modal -->
+  <div id="onboarding-overlay" class="modal-overlay hidden">
+    <div class="glass-strong modal-box p-8">
+      <div class="text-center mb-6">
+        <div class="text-4xl mb-2">🌸</div>
+        <h1 class="font-serif text-2xl font-bold grad-pink mb-1">Welcome, Kaushiki 💕</h1>
+        <p class="text-sm text-secondary">Let's set up your cycle tracker</p>
+      </div>
+      <div class="space-y-5">
+        <div>
+          <label class="label">When did your last period start?</label>
+          <input id="ob-last-period" type="date" class="field" />
+        </div>
+        <div>
+          <label class="label">Average cycle length (days)</label>
+          <input id="ob-cycle-len" type="number" min="21" max="45" value="28" class="field" />
+        </div>
+        <div>
+          <label class="label">Average period duration (days)</label>
+          <input id="ob-period-len" type="number" min="2" max="10" value="5" class="field" />
+        </div>
+        <button id="ob-submit" class="btn-primary w-full mt-3">Start tracking ✨</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day Log Modal -->
+  <div id="daylog-overlay" class="modal-overlay hidden">
+    <div class="glass-strong modal-box p-6">
+      <div class="flex items-center justify-between mb-5">
+        <h2 id="daylog-title" class="font-serif text-xl font-bold grad-pink">Log Day</h2>
+        <button id="daylog-close" class="text-2xl opacity-60 hover:opacity-100 transition-opacity">✕</button>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="label">Date</label>
+          <input id="dl-date" type="date" class="field" />
+        </div>
+        <div>
+          <label class="label">Period Flow</label>
+          <div class="flex gap-2 flex-wrap" id="dl-flow-pills">
+            <button class="flow-pill" data-flow="none">None 🌙</button>
+            <button class="flow-pill" data-flow="spotting">Spotting 🩸</button>
+            <button class="flow-pill" data-flow="light">Light 💧</button>
+            <button class="flow-pill" data-flow="medium">Medium 🌊</button>
+            <button class="flow-pill" data-flow="heavy">Heavy 🌊🌊</button>
+          </div>
+        </div>
+        <div>
+          <label class="label">Mood</label>
+          <div class="grid grid-cols-4 gap-2" id="dl-moods">
+            <div class="mood-card" data-mood="happy"><div class="text-xl">😊</div><div class="text-xs mt-1">Happy</div></div>
+            <div class="mood-card" data-mood="lovey"><div class="text-xl">🥰</div><div class="text-xs mt-1">Lovey</div></div>
+            <div class="mood-card" data-mood="irritable"><div class="text-xl">😤</div><div class="text-xs mt-1">Irritable</div></div>
+            <div class="mood-card" data-mood="sad"><div class="text-xl">😢</div><div class="text-xs mt-1">Sad</div></div>
+            <div class="mood-card" data-mood="anxious"><div class="text-xl">😰</div><div class="text-xs mt-1">Anxious</div></div>
+            <div class="mood-card" data-mood="energetic"><div class="text-xl">⚡</div><div class="text-xs mt-1">Energetic</div></div>
+            <div class="mood-card" data-mood="calm"><div class="text-xl">🧘</div><div class="text-xs mt-1">Calm</div></div>
+            <div class="mood-card" data-mood="horny"><div class="text-xl">🔥</div><div class="text-xs mt-1">Fiery</div></div>
+          </div>
+        </div>
+        <div>
+          <label class="label">Symptoms</label>
+          <div class="flex flex-wrap gap-2" id="dl-symptoms">
+            <span class="sym-chip" data-sym="cramps">🫙 Cramps</span>
+            <span class="sym-chip" data-sym="headache">🤕 Headache</span>
+            <span class="sym-chip" data-sym="bloating">🎈 Bloating</span>
+            <span class="sym-chip" data-sym="fatigue">😴 Fatigue</span>
+            <span class="sym-chip" data-sym="nausea">🤢 Nausea</span>
+            <span class="sym-chip" data-sym="acne">✨ Acne</span>
+            <span class="sym-chip" data-sym="breast-tender">🌸 Breast tender</span>
+            <span class="sym-chip" data-sym="crave-arnab">💕 Craving Arnab</span>
+            <span class="sym-chip" data-sym="horny-arnab">🔥 Super horny for Arnab</span>
+            <span class="sym-chip" data-sym="emotional-arnab">🥺 Extra emotional for Arnab</span>
+            <span class="sym-chip" data-sym="irritated-arnab">😠 Irritated at Arnab</span>
+            <span class="sym-chip" data-sym="cuddle-arnab">🤗 Need Arnab's cuddles</span>
+          </div>
+        </div>
+        <div>
+          <label class="label">💑 Intimacy with Arnab?</label>
+          <div class="flex gap-2 flex-wrap mb-2" id="dl-intimate-pills">
+            <button class="flow-pill" data-intimate="no">No 🌙</button>
+            <button class="flow-pill" data-intimate="yes">Yes 💕</button>
+            <button class="flow-pill" data-intimate="during">Yes (during period) 🩸💕</button>
+          </div>
+          <input id="dl-intimate-note" type="text" placeholder="Notes... e.g. amazing, cramps but worth it 💕" class="field hidden" />
+        </div>
+        <div>
+          <label class="label">Notes</label>
+          <textarea id="dl-notes" rows="2" placeholder="How are you feeling? ✨" class="field resize-none"></textarea>
+        </div>
+        <div class="flex gap-3 pt-2">
+          <button id="dl-save" class="btn-primary flex-1">Save 💾</button>
+          <button id="dl-cancel" class="btn-secondary flex-1">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Shell -->
+  <div id="app" class="hidden relative z-10 flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="glass-strong sticky top-0 z-50 px-4 py-3 mx-3 mt-3 rounded-2xl flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="font-serif font-bold text-base grad-pink leading-tight">Lumina Flow</div>
+        <div id="header-subtitle" class="text-xs text-secondary hidden sm:block">Your cycle, your power</div>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="glass px-3 py-1 rounded-full text-xs flex items-center gap-1">
+          <span>🔥</span><span id="streak-badge">0</span><span class="text-secondary ml-0.5">streak</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Container -->
+    <main class="flex-1 px-3 py-4 pb-28 max-w-2xl mx-auto w-full">
+      <div id="page-dashboard" class="page active"></div>
+      <div id="page-log" class="page"></div>
+      <div id="page-calendar" class="page"></div>
+      <div id="page-insights" class="page"></div>
+      <div id="page-journal" class="page"></div>
+      <div id="page-settings" class="page"></div>
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav class="glass-strong fixed bottom-3 left-3 right-3 max-w-2xl mx-auto rounded-2xl px-2 py-2 z-50 flex justify-around">
+      <button class="nav-item active" data-page="dashboard"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></button>
+      <button class="nav-item" data-page="log"><span class="nav-icon">📝</span><span class="nav-label">Log</span></button>
+      <button class="nav-item" data-page="calendar"><span class="nav-icon">📅</span><span class="nav-label">Calendar</span></button>
+      <button class="nav-item" data-page="insights"><span class="nav-icon">📊</span><span class="nav-label">Insights</span></button>
+      <button class="nav-item" data-page="journal"><span class="nav-icon">📖</span><span class="nav-label">Journal</span></button>
+      <button class="nav-item" data-page="settings"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
+    </nav>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
