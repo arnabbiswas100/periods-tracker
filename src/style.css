@@ -412,9 +412,9 @@ input[type=range]::-webkit-slider-thumb {
 /* ── Toast ── */
 #toast {
   position: fixed;
-  bottom: 80px;
+  top: 20px;
   left: 50%;
-  transform: translateX(-50%) translateY(80px);
+  transform: translateX(-50%) translateY(-100px);
   background: rgba(30, 15, 50, .9);
   border: 1px solid rgba(251, 113, 133, .3);
   border-radius: 14px;
@@ -422,13 +422,18 @@ input[type=range]::-webkit-slider-thumb {
   color: #f1e6ff;
   font-size: .9rem;
   z-index: 9998;
-  transition: transform .4s cubic-bezier(.34, 1.56, .64, 1);
+  transition: all .4s cubic-bezier(.34, 1.56, .64, 1);
   backdrop-filter: blur(20px);
   white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
 }
 
 #toast.show {
   transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  visibility: visible;
 }
 
 /* ── Confetti ── */

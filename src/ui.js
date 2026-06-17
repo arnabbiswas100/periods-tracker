@@ -40,7 +40,7 @@ export function launchConfetti() {
 }
 
 // ─── Toast ────────────────────────────────────────────────────────
-export function showToast(msg, duration = 3000) {
+export function showToast(msg, duration = 5000) {
   const el = document.getElementById('toast');
   el.textContent = msg;
   el.classList.add('show');
