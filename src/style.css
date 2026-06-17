@@ -87,8 +87,11 @@ body {
 .glass {
   background: var(--glass);
   border: 1px solid var(--glass-border);
-  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: backdrop-filter;
   border-radius: 20px;
   transition: background .3s, box-shadow .3s;
 }
@@ -100,9 +103,11 @@ body {
 .glass-strong {
   background: rgba(255, 255, 255, .1);
   border: 1px solid rgba(255, 255, 255, .18);
-  backdrop-filter: blur(30px);
-  backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
+  backdrop-filter: blur(30px);
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: backdrop-filter;
   border-radius: 20px;
 }
 
